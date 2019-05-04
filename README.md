@@ -135,11 +135,15 @@ curl -X PUT "localhost:9200/_template/minemeld" -H 'Content-Type: application/js
 '
 ```
 
-Alternatively, you can download the minemeld template file from this repo and apply it like so:
+Alternatively, download the `minemeld.template.json` file from this repo and apply it like so:
 
 ```
 curl -XPUT 'http://localhost:9200/_template/minemeld' -d@minemeld.template.json
 ```
+
+Next, we're ready to set up minemeld to output to Logstash
+
+## Minemeld Configuration
 
 
 ## Troubleshooting
