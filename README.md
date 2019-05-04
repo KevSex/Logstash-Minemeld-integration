@@ -4,10 +4,8 @@ With the lack of information out there to integrate minemeld with logstash, I th
 
 ## Prerequisites
 
- - [Elasticsearch](https://www.elastic.co/products/elasticsearch)
+ - ELK Stack - [Elasticsearch](https://www.elastic.co/products/elasticsearch) / [Logstash](https://www.elastic.co/products/logstash) / [Kibana](https://www.elastic.co/products/kibana)
  - [Minemeld](https://www.paloaltonetworks.com/products/secure-the-network/subscriptions/minemeld)
- - [Logstash](https://www.elastic.co/products/logstash)
- - [Kibana](https://www.elastic.co/products/kibana) - To view the data
 
 ## Logstash Configuration
 
