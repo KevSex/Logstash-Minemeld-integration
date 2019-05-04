@@ -1,6 +1,6 @@
 # Logstash/Minemeld integration
 
-With the lack of information out there to integrate minemeld with logstash, I thought I'd write up some steps detailing this procedure including a use case for Threat Intelligence feeds.
+With the lack of information out there to integrate minemeld with logstash, I thought I'd write up some steps detailing this procedure.
 
 ## Prerequisites
 
