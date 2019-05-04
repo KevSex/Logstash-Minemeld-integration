@@ -8,7 +8,7 @@ With the lack of information out there to integrate minemeld with logstash, I th
  - [Minemeld](https://www.paloaltonetworks.com/products/secure-the-network/subscriptions/minemeld)
  - [Logstash](https://www.elastic.co/products/logstash)
 
-## Configuration
+## Logstash Configuration
 
 To start, we need to prepare Logstash to ingest the data that it will receive from minemeld. We do this using a tcp input. There is some filters we apply to parse the data received and then output into Elasticsearch.
  
@@ -79,6 +79,67 @@ We therefore use an if statement to check if the [message] value is `withdraw`. 
 
 When logstash sends an event to elasticsearch, a document_id is randomly generated. In order to keep track of documents so we can remove them when a `withdraw` message arrives, we use the fingerprint field that we set in the filter (`[@metadata][fingerprint]`)
 
+## Elasticsearch Configuration
+
+Now that we have Logstash set up to listen for indicators arriving from minemeld and passing the data off into Elasticsearch, we want elasticsearch to properly map the fields, e.g. IP address is marked as an IP address as opposed to a string.
+To achieve this, we create a template for minemeld.
+
+Run the following command:
+
+```
+curl -X PUT "localhost:9200/_template/minemeld" -H 'Content-Type: application/json' -d'
+{
+  "index_patterns": "minemeld",
+  "settings": {
+      "index" : {
+        "mapping" : {
+          "total_fields" : {
+            "limit" : "10000"
+          }
+        },
+        "refresh_interval" : "5s",
+        "number_of_routing_shards" : "30",
+        "number_of_shards" : "1",
+	"codec": "best_compression"
+      }
+  },
+  "mappings": {
+    "doc": {
+      "properties": {
+		"firstIP" : { "type" : "ip" }, 
+		"lastIP": { "type" : "ip" },
+		"first_seen": { "type" : "date" },
+		"last_seen": { "type" : "date" },
+		"@timestamp": { "type" : "date" },
+		"type": { "type" : "keyword" },
+		"port": { "type" : "integer" },
+		"message": { "type" : "keyword" },
+		"confidence": { "type" : "integer" },
+		"@origin": { "type" : "keyword" },
+		"share_level": { "type" : "keyword" },
+		"tags": { "type" : "keyword" },
+		"host": { "type" : "keyword" },
+		"syslog_severity_code": { "type" : "integer" },
+		"syslog_severity": { "type" : "keyword" },
+		"logstash_output_node": { "type" : "keyword" },
+		"syslog_facility": { "type" : "keyword" },
+		"dshield_email": { "type" : "keyword" },
+		"dshield_name": { "type" : "keyword" },
+		"dshield_country": { "type" : "keyword" },
+		"dshield_nattacks": { "type" : "keyword" },
+		"dshield_email": { "type" : "keyword" }
+      }
+    }
+  }
+}
+'
+```
+
+Alternatively, you can download the minemeld template file from this repo and apply it like so:
+
+```
+curl -XPUT 'http://localhost:9200/_template/minemeld' -d@minemeld.template.json
+```
 
 
 ## Troubleshooting
