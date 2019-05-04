@@ -1,0 +1,45 @@
+{
+  "index_patterns": "minemeld",
+  "settings": {
+      "index" : {
+        "mapping" : {
+          "total_fields" : {
+            "limit" : "10000"
+          }
+        },
+        "refresh_interval" : "5s",
+        "number_of_routing_shards" : "30",
+        "number_of_shards" : "1",
+        "codec": "best_compression"
+      }
+  },
+  "mappings": {
+    "doc": {
+      "properties": {
+		"firstIP" : { "type" : "ip" }, 
+		"lastIP": { "type" : "ip" },
+		"first_seen": { "type" : "date" },
+		"last_seen": { "type" : "date" },
+		"@timestamp": { "type" : "date" },
+		"type": { "type" : "keyword" },
+		"port": { "type" : "integer" },
+		"message": { "type" : "keyword" },
+		"confidence": { "type" : "integer" },
+		"@origin": { "type" : "keyword" },
+		"share_level": { "type" : "keyword" },
+		"tags": { "type" : "keyword" },
+		"host": { "type" : "keyword" },
+		"syslog_severity_code": { "type" : "integer" },
+		"syslog_severity": { "type" : "keyword" },
+		"logstash_output_node": { "type" : "keyword" },
+		"syslog_facility": { "type" : "keyword" },
+		"dshield_email": { "type" : "keyword" },
+		"dshield_name": { "type" : "keyword" },
+		"dshield_country": { "type" : "keyword" },
+		"dshield_nattacks": { "type" : "keyword" },
+		"dshield_email": { "type" : "keyword" }
+      }
+    }
+  }
+}
+'
