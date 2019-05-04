@@ -7,6 +7,7 @@ With the lack of information out there to integrate minemeld with logstash, I th
  - [Elasticsearch](https://www.elastic.co/products/elasticsearch)
  - [Minemeld](https://www.paloaltonetworks.com/products/secure-the-network/subscriptions/minemeld)
  - [Logstash](https://www.elastic.co/products/logstash)
+ - [Kibana](https://www.elastic.co/products/kibana) - To view the data
 
 ## Logstash Configuration
 
@@ -145,6 +146,27 @@ Next, we're ready to set up minemeld to output to Logstash
 
 ## Minemeld Configuration
 
+To enable the Logstash output, navigate to the "CONFIG" section and click the hamburger icon at the bottom right. This will take you to the Prototypes section where you can add miners, processors or outputs. Use the search to find the `stdlib.localLogStash` output prototype.
+
+![prototype]( https://github.com/KevSex/Logstash-Minemeld-integration/blob/master/images/prototypes.jpg "Prototype search")
+
+First, we need to make our own copy of this prototype to update some of the configuration before we clone it. Select 'New' and update the `logstash_host` and `logstash_port` accordingly. Once we've made the changes and select OK, you'll notice a new prototype starting `minemeldlocal`. We want to select this prototype and 'Clone' it.
+
+Select the appropriate processor, in my case using the default `inboundaggregator`
+
+![add_node]( https://github.com/KevSex/Logstash-Minemeld-integration/blob/master/images/add_node.jpg "Add node")
+
+Finally, we select 'Commit' to save our changes and restart the minemeld engine.
+
+When minemeld restarts, you should start to see events arriving into Elasticsearch.
+
+At this stage, if you navigate to Kibana and create a new index pattern under Management > Kibana > Index Patterns, you shoud see the newly created index called `minemeld`.
+
+![create_index_pattern]( https://github.com/KevSex/Logstash-Minemeld-integration/blob/master/images/create_index_pattern.jpg "Create index pattern")
+
+On Step 2 of configuring the index pattern, when selecting the timestamp field name, choose "I don't want to use the Time Filter" and Create the pattern.
+
+And that's it! We now have indicator's being indexed into Elasticsearch and visible within Kibana.
 
 ## Troubleshooting
 
